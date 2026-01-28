@@ -1,4 +1,4 @@
-package pages;
+package pageobjects;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
@@ -15,8 +15,6 @@ public class LoginPage {
     private final By emailInput = By.xpath("//label[text()='Email']/following-sibling::input");
     private final By passwordInput = By.name("Пароль");
     private final By loginButton = By.xpath("//button[text()='Войти']");
-    private final By forgotPasswordLink = By.linkText("Восстановить пароль");
-    private final By registerLink = By.linkText("Зарегистрироваться");
     private final By loginHeader = By.xpath("//h2[text()='Вход']");
 
     public LoginPage(WebDriver driver) {

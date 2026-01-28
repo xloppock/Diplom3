@@ -1,7 +1,7 @@
 package tests;
 
 import org.junit.Assert;
-import pages.ConstructorPage;
+import pageobjects.ConstructorPage;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;

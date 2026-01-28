@@ -1,9 +1,9 @@
 package tests;
 
-import pages.LoginPage;
-import pages.MainPage;
-import pages.RegistrationPage;
-import pages.ForgotPasswordPage;
+import pageobjects.LoginPage;
+import pageobjects.MainPage;
+import pageobjects.RegistrationPage;
+import pageobjects.ForgotPasswordPage;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
