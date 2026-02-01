@@ -2,7 +2,6 @@ package pageobjects;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -26,20 +25,23 @@ public class ConstructorPage {
 
     @Step("Кликнуть по вкладке 'Булки'")
     public void clickBunsTab() {
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(bunsTab));
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         wait.until(ExpectedConditions.elementToBeClickable(bunsTab)).click();
+
+        waitForActiveTab("Булки");
     }
 
     @Step("Кликнуть по вкладке 'Соусы'")
     public void clickSaucesTab() {
         wait.until(ExpectedConditions.elementToBeClickable(saucesTab)).click();
+
+        waitForActiveTab("Соусы");
     }
 
     @Step("Кликнуть по вкладке 'Начинки'")
     public void clickFillingsTab() {
         wait.until(ExpectedConditions.elementToBeClickable(fillingsTab)).click();
+
+        waitForActiveTab("Начинки");
     }
 
     @Step("Получить текст активной вкладки")

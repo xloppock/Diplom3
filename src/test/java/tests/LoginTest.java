@@ -1,5 +1,9 @@
 package tests;
 
+import models.User;
+import org.junit.After;
+import org.junit.Before;
+import steps.UserSteps;
 import pageobjects.LoginPage;
 import pageobjects.MainPage;
 import pageobjects.RegistrationPage;
@@ -15,18 +19,42 @@ import org.junit.Test;
 @Feature("Различные способы входа в аккаунт")
 public class LoginTest extends BaseTest {
 
+    private User testUser;
+    private final UserSteps userSteps = new UserSteps();
+
+    @Before
+    public void setUpTest() {
+        testUser = userSteps.createUser();
+    }
+
+    @After
+    public void tearDown() {
+        closeModalIfPresent();
+        userSteps.deleteUser(testUser);
+        super.tearDown();
+    }
+
     @Test
     @Description("Успешный вход через кнопку 'Войти в аккаунт' на главной странице")
     @Story("Вход с главной страницы")
     public void testLoginFromMainPageButton() {
         openMainPage();
+        closeModalIfPresent();
 
         MainPage mainPage = new MainPage(driver);
         LoginPage loginPage = new LoginPage(driver);
 
+        closeModalIfPresent();
         mainPage.clickLoginAccountButton();
+
+        closeModalIfPresent();
         Assert.assertTrue("Должна открыться страница входа",
                 loginPage.isLoginPageDisplayed());
+
+        loginPage.login(testUser.getEmail(), testUser.getPassword());
+
+        Assert.assertTrue("Должна отображаться главная страница",
+                mainPage.isMainPageDisplayed());
     }
 
     @Test
@@ -34,13 +62,22 @@ public class LoginTest extends BaseTest {
     @Story("Вход через личный кабинет")
     public void testLoginFromPersonalAccountButton() {
         openMainPage();
+        closeModalIfPresent();
 
         MainPage mainPage = new MainPage(driver);
         LoginPage loginPage = new LoginPage(driver);
 
+        closeModalIfPresent();
         mainPage.clickProfileButton();
+
+        closeModalIfPresent();
         Assert.assertTrue("Должна открыться страница входа",
                 loginPage.isLoginPageDisplayed());
+
+        loginPage.login(testUser.getEmail(), testUser.getPassword());
+
+        Assert.assertTrue("Должна отображаться главная страница",
+                mainPage.isMainPageDisplayed());
     }
 
     @Test
@@ -48,16 +85,26 @@ public class LoginTest extends BaseTest {
     @Story("Вход с формы регистрации")
     public void testLoginFromRegistrationForm() {
         openPage("register");
+        closeModalIfPresent();
 
         RegistrationPage registerPage = new RegistrationPage(driver);
         LoginPage loginPage = new LoginPage(driver);
+        MainPage mainPage = new MainPage(driver);
 
         Assert.assertTrue("Должна открыться страница регистрации",
                 registerPage.isRegistrationPageDisplayed());
 
+        closeModalIfPresent();
         registerPage.clickLoginLink();
+
+        closeModalIfPresent();
         Assert.assertTrue("Должна открыться страница входа",
                 loginPage.isLoginPageDisplayed());
+
+        loginPage.login(testUser.getEmail(), testUser.getPassword());
+
+        Assert.assertTrue("Должна отображаться главная страница",
+                mainPage.isMainPageDisplayed());
     }
 
     @Test
@@ -65,15 +112,25 @@ public class LoginTest extends BaseTest {
     @Story("Вход со страницы восстановления пароля")
     public void testLoginFromForgotPasswordForm() {
         openPage("forgot-password");
+        closeModalIfPresent();
 
         ForgotPasswordPage forgotPasswordPage = new ForgotPasswordPage(driver);
         LoginPage loginPage = new LoginPage(driver);
+        MainPage mainPage = new MainPage(driver);
 
         Assert.assertTrue("Должна открыться страница восстановления пароля",
                 forgotPasswordPage.isForgotPasswordPageDisplayed());
 
+        closeModalIfPresent();
         forgotPasswordPage.clickLoginLink();
+
+        closeModalIfPresent();
         Assert.assertTrue("Должна открыться страница входа",
                 loginPage.isLoginPageDisplayed());
+
+        loginPage.login(testUser.getEmail(), testUser.getPassword());
+
+        Assert.assertTrue("Должна отображаться главная страница",
+                mainPage.isMainPageDisplayed());
     }
 }

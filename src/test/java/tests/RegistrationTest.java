@@ -1,5 +1,8 @@
 package tests;
 
+import models.User;
+import org.junit.After;
+import org.junit.Before;
 import pageobjects.LoginPage;
 import pageobjects.RegistrationPage;
 import io.qameta.allure.Description;
@@ -9,10 +12,21 @@ import io.qameta.allure.Story;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import steps.UserSteps;
 
 @Epic("Регистрация")
 @Feature("Форма регистрации пользователя")
 public class RegistrationTest extends BaseTest {
+
+    private User testUser;
+    private final UserSteps userSteps = new UserSteps();
+
+
+    @After
+    public void userTearDown() {
+        userSteps.deleteUser(testUser);
+        super.tearDown();
+    }
 
     @Test
     @Description("Успешная регистрация с валидными данными и переход на страницу входа")
