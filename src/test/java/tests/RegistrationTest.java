@@ -1,0 +1,71 @@
+package tests;
+
+import models.User;
+import org.junit.After;
+import org.junit.Before;
+import pageobjects.LoginPage;
+import pageobjects.RegistrationPage;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+import org.junit.Test;
+import steps.UserSteps;
+
+@Epic("Регистрация")
+@Feature("Форма регистрации пользователя")
+public class RegistrationTest extends BaseTest {
+
+    private User testUser;
+    private final UserSteps userSteps = new UserSteps();
+
+    @Before
+    public void setUpTest() {
+        testUser = userSteps.createUser();
+    }
+
+    @After
+    public void tearDown() {
+        userSteps.deleteUser(testUser);
+        super.tearDown();
+    }
+
+    @Test
+    @Description("Успешная регистрация с валидными данными и переход на страницу входа")
+    @Story("Успешная регистрация")
+    public void testSuccessfulRegistrationRedirectsToLoginPage() {
+        openPage("register");
+
+        RegistrationPage registerPage = new RegistrationPage(driver);
+        LoginPage loginPage = new LoginPage(driver);
+
+        String name = RandomStringUtils.randomAlphabetic(8);
+        String email = RandomStringUtils.randomAlphabetic(8) + "@yandex.ru";
+        String password = RandomStringUtils.randomAlphanumeric(8);
+
+        registerPage.fillRegisterForm(name, email, password);
+
+        Assert.assertTrue("После регистрации ожидался переход на страницу входа",
+                loginPage.isLoginPageDisplayed());
+    }
+
+    @Test
+    @Description("Появляется ошибка при регистрации с паролем меньше 6 символов")
+    @Story("Некорректная регистрация")
+    public void testRegisterWithShortPasswordShowsError() {
+        openPage("register");
+
+        RegistrationPage registerPage = new RegistrationPage(driver);
+
+        String name = RandomStringUtils.randomAlphabetic(8);
+        String email = RandomStringUtils.randomAlphabetic(8) + "@yandex.ru";
+        String shortPassword = "12345"; // Меньше 6 символов
+
+        registerPage.fillRegisterForm(name, email, shortPassword);
+
+        Assert.assertTrue("Ожидалась ошибка 'Некорректный пароль'",
+                registerPage.isPasswordErrorDisplayed());
+    }
+}
