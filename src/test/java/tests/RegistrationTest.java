@@ -21,9 +21,13 @@ public class RegistrationTest extends BaseTest {
     private User testUser;
     private final UserSteps userSteps = new UserSteps();
 
+    @Before
+    public void setUpTest() {
+        testUser = userSteps.createUser();
+    }
 
     @After
-    public void userTearDown() {
+    public void tearDown() {
         userSteps.deleteUser(testUser);
         super.tearDown();
     }

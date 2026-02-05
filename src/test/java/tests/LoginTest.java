@@ -29,7 +29,6 @@ public class LoginTest extends BaseTest {
 
     @After
     public void tearDown() {
-        closeModalIfPresent();
         userSteps.deleteUser(testUser);
         super.tearDown();
     }
@@ -39,15 +38,12 @@ public class LoginTest extends BaseTest {
     @Story("Вход с главной страницы")
     public void testLoginFromMainPageButton() {
         openMainPage();
-        closeModalIfPresent();
 
         MainPage mainPage = new MainPage(driver);
         LoginPage loginPage = new LoginPage(driver);
 
-        closeModalIfPresent();
         mainPage.clickLoginAccountButton();
 
-        closeModalIfPresent();
         Assert.assertTrue("Должна открыться страница входа",
                 loginPage.isLoginPageDisplayed());
 
@@ -62,15 +58,12 @@ public class LoginTest extends BaseTest {
     @Story("Вход через личный кабинет")
     public void testLoginFromPersonalAccountButton() {
         openMainPage();
-        closeModalIfPresent();
 
         MainPage mainPage = new MainPage(driver);
         LoginPage loginPage = new LoginPage(driver);
 
-        closeModalIfPresent();
         mainPage.clickProfileButton();
 
-        closeModalIfPresent();
         Assert.assertTrue("Должна открыться страница входа",
                 loginPage.isLoginPageDisplayed());
 
@@ -85,7 +78,6 @@ public class LoginTest extends BaseTest {
     @Story("Вход с формы регистрации")
     public void testLoginFromRegistrationForm() {
         openPage("register");
-        closeModalIfPresent();
 
         RegistrationPage registerPage = new RegistrationPage(driver);
         LoginPage loginPage = new LoginPage(driver);
@@ -94,10 +86,8 @@ public class LoginTest extends BaseTest {
         Assert.assertTrue("Должна открыться страница регистрации",
                 registerPage.isRegistrationPageDisplayed());
 
-        closeModalIfPresent();
         registerPage.clickLoginLink();
 
-        closeModalIfPresent();
         Assert.assertTrue("Должна открыться страница входа",
                 loginPage.isLoginPageDisplayed());
 
@@ -112,7 +102,6 @@ public class LoginTest extends BaseTest {
     @Story("Вход со страницы восстановления пароля")
     public void testLoginFromForgotPasswordForm() {
         openPage("forgot-password");
-        closeModalIfPresent();
 
         ForgotPasswordPage forgotPasswordPage = new ForgotPasswordPage(driver);
         LoginPage loginPage = new LoginPage(driver);
@@ -121,10 +110,8 @@ public class LoginTest extends BaseTest {
         Assert.assertTrue("Должна открыться страница восстановления пароля",
                 forgotPasswordPage.isForgotPasswordPageDisplayed());
 
-        closeModalIfPresent();
         forgotPasswordPage.clickLoginLink();
 
-        closeModalIfPresent();
         Assert.assertTrue("Должна открыться страница входа",
                 loginPage.isLoginPageDisplayed());
 

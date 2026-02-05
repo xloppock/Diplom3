@@ -2,16 +2,9 @@ package pageobjects;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 
-public class RegistrationPage {
-
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+public class RegistrationPage extends BasePage {
 
     private final By nameInput = By.name("name");
     private final By emailInput = By.xpath("//label[text()='Email']/following-sibling::input");
@@ -22,28 +15,31 @@ public class RegistrationPage {
     private final By registerHeader = By.xpath("//h2[text()='Регистрация']");
 
     public RegistrationPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        super(driver);
     }
 
     @Step("Ввести имя: {name}")
     public void enterName(String name) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(nameInput)).sendKeys(name);
+        closeModalIfPresent();
+        sendKeysToElement(nameInput, name);
     }
 
     @Step("Ввести email: {email}")
     public void enterEmail(String email) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput)).sendKeys(email);
+        closeModalIfPresent();
+        sendKeysToElement(emailInput, email);
     }
 
     @Step("Ввести пароль: {password}")
     public void enterPassword(String password) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordInput)).sendKeys(password);
+        closeModalIfPresent();
+        sendKeysToElement(passwordInput, password);
     }
 
     @Step("Нажать кнопку 'Зарегистрироваться'")
     public void clickRegisterButton() {
-        wait.until(ExpectedConditions.elementToBeClickable(registerButton)).click();
+        closeModalIfPresent();
+        clickElement(registerButton);
     }
 
     @Step("Заполнить форму регистрации: имя={name}, email={email}, пароль={password}")
@@ -56,25 +52,19 @@ public class RegistrationPage {
 
     @Step("Нажать ссылку 'Войти'")
     public void clickLoginLink() {
-        wait.until(ExpectedConditions.elementToBeClickable(loginLink)).click();
+        closeModalIfPresent();
+        clickElement(loginLink);
     }
 
     @Step("Проверить наличие ошибки пароля")
     public boolean isPasswordErrorDisplayed() {
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(passwordError));
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+        closeModalIfPresent();
+        return isElementVisible(passwordError);
     }
 
     @Step("Проверить, что страница регистрации открыта")
     public boolean isRegistrationPageDisplayed() {
-        try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(registerHeader)).isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
+        closeModalIfPresent();
+        return isElementVisible(registerHeader);
     }
 }

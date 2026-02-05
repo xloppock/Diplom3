@@ -3,14 +3,8 @@ package pageobjects;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 
-public class LoginPage {
-
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+public class LoginPage extends BasePage {
 
     private final By emailInput = By.xpath("//label[text()='Email']/following-sibling::input");
     private final By passwordInput = By.name("Пароль");
@@ -18,23 +12,25 @@ public class LoginPage {
     private final By loginHeader = By.xpath("//h2[text()='Вход']");
 
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        super(driver);
     }
 
     @Step("Ввести email: {email}")
     public void enterEmail(String email) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput)).sendKeys(email);
+        closeModalIfPresent();
+        sendKeysToElement(emailInput, email);
     }
 
     @Step("Ввести пароль: {password}")
     public void enterPassword(String password) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordInput)).sendKeys(password);
+        closeModalIfPresent();
+        sendKeysToElement(passwordInput, password);
     }
 
     @Step("Нажать кнопку 'Войти'")
     public void clickLoginButton() {
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        closeModalIfPresent();
+        clickElement(loginButton);
     }
 
     @Step("Выполнить вход с email: {email} и паролем: {password}")
@@ -46,10 +42,7 @@ public class LoginPage {
 
     @Step("Проверить, что страница входа открыта")
     public boolean isLoginPageDisplayed() {
-        try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(loginHeader)).isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
+        closeModalIfPresent();
+        return isElementVisible(loginHeader);
     }
 }
